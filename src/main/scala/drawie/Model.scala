@@ -1,5 +1,7 @@
 package drawie
 
+import java.awt.Toolkit
+import java.awt.datatransfer.StringSelection
 import java.io.{ByteArrayInputStream, IOException}
 import java.net.URISyntaxException
 import java.util.UUID
@@ -13,44 +15,73 @@ import sun.misc.BASE64Decoder
 
 import scala.collection.mutable.ListBuffer
 
-
 object Model {
-  val hostURL = "https://drawie.herokuapp.com/"
 
-  var socket: Socket = _
-
+  //TODO moze jednak daloby sie cos zrobic z varami? i czy moze private?
   var roomUrl: String = _
-
   var roomView: RoomView = _
+  private val HOST_URL = "https://drawie.herokuapp.com/"
+  private var socket: Socket = _
+  private var mStroke: ListBuffer[List[Int]] = ListBuffer() //TODO moze kolekcja co mozna zwiekszac ale val?
 
   def newRoom(): Boolean = {
-    joinRoom(hostURL + "?room=" + generateRandomUUID())
+    joinRoom(HOST_URL + "?room=" + generateRandomUUID())
   }
-
-  var mStroke: ListBuffer[List[Int]] = ListBuffer()
 
   def joinRoom(url: String): Boolean = {
-    if (url.length == 0) return false
-    try {
-      socket = IO.socket(url)
+    if (url.length != 0) {
+      try
+        socket = IO.socket(url)
+      catch {
+        case _: URISyntaxException | _: RuntimeException => return false
+      }
+      configureSocket()
+      socket.connect()
+      roomUrl = url
+      true
     }
-    catch {
-      case e: URISyntaxException => return false
-      case e: RuntimeException => return false
-    }
-    configureSocket();
-    socket.connect()
-
-    roomUrl = url;
-    true
+    else
+      false
   }
 
-  def generateRandomUUID(): String = {
-    UUID.randomUUID().toString
+  def handleRedoClick(): Unit = {
+    socket.emit("redo")
   }
 
-  def configureSocket(): Unit = {
-    val dumpListener: Emitter.Listener = new Emitter.Listener {
+  def handleUndoClick(): Unit = {
+    socket.emit("undo")
+  }
+
+  def manageOnMousePressed(x: Int, y: Int, fillSelected: Boolean, color: Color): Unit = {
+    if (fillSelected)
+      bucketFill(x, y, color)
+    else {
+      mStroke = ListBuffer()
+      mStroke += List[Int](x, y)
+      roomView.beginUserStroke(x, y)
+    }
+  }
+
+  def manageOnMouseDragged(x: Int, y: Int, fillSelected: Boolean): Unit = {
+    if (!fillSelected) {
+      mStroke += List[Int](x, y)
+      roomView.drawUserStroke(x, y)
+    }
+  }
+
+  def manageOnMouseReleased(fillSelected: Boolean): Unit = {
+    if (!fillSelected)
+      sendStroke(mStroke.toList)
+  }
+
+  def copyURLToClipboard(): Unit = {
+    val selection = new StringSelection(roomUrl)
+    val clipboard = Toolkit.getDefaultToolkit.getSystemClipboard
+    clipboard.setContents(selection, selection)
+  }
+
+  private def configureSocket(): Unit = {
+    val dumpListener: Emitter.Listener = new Emitter.Listener() { //TODO co to za warning dziwny ?
       override def call(args: AnyRef*): Unit = {
         val dump = args(0).asInstanceOf[JSONObject]
         manageReceivedDumpBC(dump)
@@ -68,46 +99,65 @@ object Model {
     socket.on("strokeBC", strokeListener)
   }
 
-  def manageReceivedDumpBC(dump: JSONObject): Unit = {
-    println(dump)
-    try {
-      val imgInB64 = dump.getString("snapshot").split(",");
-      val inputStream = new ByteArrayInputStream(new BASE64Decoder().decodeBuffer(imgInB64(imgInB64.length - 1)));
-      roomView.loadingStackPane.visible = false
-      roomView.drawDump(new Image(inputStream))
-    } catch {
-      case ioe: IOException => println(ioe) // more specific cases first !
-      case e: Exception => println(e)
-    }
-
+  private def manageReceivedDumpBC(dump: JSONObject): Unit = try {
+    val imgInB64 = dump.getString("snapshot").split(",") //todo CZY TO ponizej jest tez scaolowe?
+    val inputStream = new ByteArrayInputStream(new BASE64Decoder().decodeBuffer(imgInB64(imgInB64.length - 1)))
+    roomView.endLoading()
+    roomView.drawDump(new Image(inputStream))
+  } catch { // TODO co z tym? cos trzeba dodac czy nie more specific cases first ! bo printfy to tak średnio chyba
+    case ioe: IOException => ioe.printStackTrace()
+    case e: Exception => e.printStackTrace() //TODO nie wystarczy jeden do obsluzenia tego
+    //plus czy musimy w ogole to tryowac?
   }
 
-  def manageReceivedStrokeBC(stroke: JSONObject): Unit = {
-    try {
-      val opt = stroke.getJSONObject("options");
-      val color = opt.getString("strokeStyle");
-      val lineCap = opt.getString("lineCap");
-      val fillStyle = opt.getString("fillStyle");
-      val lineWidth = opt.getInt("lineWidth");
-      val jsonStroke: JSONArray = stroke.getJSONArray("stroke");
+  private def manageReceivedStrokeBC(stroke: JSONObject): Unit = try {
+    val opt = stroke.getJSONObject("options")
+    val color = opt.getString("strokeStyle")
+    val lineCap = opt.getString("lineCap")
+    val fillStyle = opt.getString("fillStyle")
+    val lineWidth = opt.getInt("lineWidth")
+    val jsonStroke: JSONArray = stroke.getJSONArray("stroke")
+    val strokeToDraw: List[Int] = (for (i <- 0 until jsonStroke.length()) yield {
+      List(jsonStroke.getJSONArray(i).getInt(0),
+        jsonStroke.getJSONArray(i).getInt(1))
+    }).flatten.toList
 
-      var strToDraw = new ListBuffer[Int]()
-      for (i <- 0 until jsonStroke.length()) {
-        strToDraw += jsonStroke.getJSONArray(i).getInt(0)
-        strToDraw += jsonStroke.getJSONArray(i).getInt(1)
-      }
-      val strokeToDraw = strToDraw.toList;
-      roomView.drawStrokeOnCanvas(color, lineCap, fillStyle, lineWidth, strokeToDraw);
-    } catch {
-      case je: JSONException => je.printStackTrace();
-    }
-
+    roomView.drawStrokeOnCanvas(color, lineCap, fillStyle, lineWidth, strokeToDraw);
+  } catch {
+    case je: JSONException => je.printStackTrace();
   }
 
+  private def generateRandomUUID(): String = {
+    UUID.randomUUID().toString //TODO co ze scalowa wersja?
+  }
 
-  private def hexColorToHashFormat(color: Color) = "#" + color.toString.substring(2, 8)
+  private def sendStroke(mStroke: List[List[Int]]): Unit = {
+    val color = hexColorToHashFormat(roomView.getColorFromColorPicker)
+    val lineCap = "round"
+    val fillStyle = "solid"
+    val lineWidth = roomView.getPaintbrushWidth
+    val strokeObj = new JSONObject
+    val options = new JSONObject
+    val stroke = new JSONArray
+    try {
+      mStroke.foreach(points => stroke.put(new JSONArray().put(points.head).put(points(1))))
+      options.put("strokeStyle", color)
+      options.put("lineCap", lineCap)
+      options.put("fillStyle", fillStyle)
+      options.put("lineWidth", lineWidth)
+      strokeObj.put("options", options)
+      strokeObj.put("stroke", stroke)
+    } catch {
+      case e: JSONException =>
+        e.printStackTrace()
+    }
+    socket.emit("stroke", strokeObj)
+  }
 
-  def bucketFill(x: Int, y: Int, color: Color): Unit = {
+  //TODO problemy z #000000 bo nie wypelnia kubełek
+  private def hexColorToHashFormat(color: Color): String = "#" + color.toString.substring(7, 13)
+
+  private def bucketFill(x: Int, y: Int, color: Color): Unit = {
     val floodFillObj = new JSONObject
     try {
       floodFillObj.put("x", x)
@@ -119,63 +169,5 @@ object Model {
         return
     }
     socket.emit("floodFill", floodFillObj)
-  }
-
-
-  def manageOnMousePressed(fillSelected: Boolean, x: Int, y: Int, color: Color): Unit = {
-    if (fillSelected) {
-      bucketFill(x, y, color)
-      return
-    }
-    mStroke = ListBuffer()
-    mStroke += List[Int](x, y)
-    roomView.beginUserStroke(x, y)
-  }
-
-  def manageOnMouseDragged(fillSelected: Boolean, x: Int, y: Int): Unit = {
-    if (fillSelected) return
-    mStroke += List[Int](x, y)
-    roomView.drawUserStroke(x, y)
-  }
-
-  def manageOnMouseReleased(fillSelected: Boolean): Unit = {
-    if (fillSelected) return
-    sendStroke(mStroke.toList)
-  }
-
-  def handleRedoClick(): Unit = {
-    socket.emit("redo")
-  }
-
-  def handleUndoClick(): Unit = {
-    socket.emit("undo")
-  }
-
-  def sendStroke(mStroke: List[List[Int]]): Unit = {
-    //TODO tu bedzie do poprawki
-    //val color = roomView.colorPicker.value.value
-    val color = "#00ffff"
-    val lineCap = "round"
-    val fillStyle = "solid"
-    val lineWidth = roomView.paintbrushWidthSlider.value.value
-    val strokeObj = new JSONObject
-    val options = new JSONObject
-    val stroke = new JSONArray
-    println(mStroke)
-    try {
-      mStroke.foreach(points => stroke.put(new JSONArray().put(points(0)).put(points(1))))
-      options.put("strokeStyle", color)
-        //hexColorToHashFormat(color)) TODO
-      options.put("lineCap", lineCap)
-      options.put("fillStyle", fillStyle)
-      options.put("lineWidth", lineWidth)
-      strokeObj.put("options", options)
-      strokeObj.put("stroke", stroke)
-    } catch {
-      case e: JSONException =>
-        e.printStackTrace()
-    }
-    println(strokeObj)
-    socket.emit("stroke", strokeObj)
   }
 }

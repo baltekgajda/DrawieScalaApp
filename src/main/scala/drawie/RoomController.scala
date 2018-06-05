@@ -5,15 +5,14 @@ import scalafx.Includes._
 import scalafx.scene.input.MouseEvent
 
 case class RoomController(view: RoomView) {
-
   view.mainMenuButton.onMouseClicked = (e: MouseEvent) => {
     val mainMenuView = MainMenuView(800, 600)
-    val menuController = MenuController(mainMenuView) //TODO menuController na mainMenu controller
-    startApp.stage.scene = menuController.view
+    val mainMenuController = MainMenuController(mainMenuView)
+    startApp.stage.scene = mainMenuController.view
   }
 
   view.copyURLButton.onMouseClicked = (e: MouseEvent) => {
-    println("Copy URL Button")
+    Model.copyURLToClipboard()
   }
 
   view.undoButton.onMouseClicked = (e: MouseEvent) => {
@@ -25,20 +24,15 @@ case class RoomController(view: RoomView) {
   }
 
   view.roomCanvas.onMousePressed = (e: MouseEvent) => {
-    println("Canvas Pressed")
-    //TODO zla wartosc w tym colorPickerze
-    Model.manageOnMousePressed(view.bucketFillToggleButton.selected.value, e.sceneX.toInt, e.sceneY.toInt, view.colorPicker.value.value)
+    Model.manageOnMousePressed(e.getX.toInt, e.getY.toInt, view.isBucketFillButtonPressed, view.getColorFromColorPicker)
   }
 
   view.roomCanvas.onMouseDragged = (e: MouseEvent) => {
-    println("Canvas Dragged")
-    Model.manageOnMouseDragged(view.bucketFillToggleButton.selected.value, e.sceneX.toInt, e.sceneY.toInt)
+    Model.manageOnMouseDragged(e.getX.toInt, e.getY.toInt, view.isBucketFillButtonPressed)
   }
 
   view.roomCanvas.onMouseReleased = (e: MouseEvent) => {
-    println("Canvas Released")
-    //TODO
-    Model.manageOnMouseReleased(view.bucketFillToggleButton.selected.value)
+    Model.manageOnMouseReleased(view.isBucketFillButtonPressed)
   }
 }
 

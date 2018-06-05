@@ -4,7 +4,7 @@ import drawie.Start.startApp
 import scalafx.Includes._
 import scalafx.scene.input.MouseEvent
 
-case class MenuController(view: MainMenuView) {
+case class MainMenuController(view: MainMenuView) {
 
   view.newRoomButton.onMouseClicked = (e: MouseEvent) => {
     val roomView = RoomView(800, 600) //TODO dodac te wielkosci gdzies

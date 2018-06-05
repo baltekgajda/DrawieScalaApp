@@ -44,7 +44,7 @@ case class MainMenuView(sceneWidth: Double, sceneHeight: Double) extends Scene(s
     urlTextField.promptText = text
   }
 
-  def getURLTextFieldText: String = urlTextField.text.value
+  def getURLTextFieldText: String = urlTextField.getText
 }
 
 object MainMenuView {

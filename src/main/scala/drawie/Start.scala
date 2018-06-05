@@ -15,7 +15,7 @@ object Start extends JFXApp {
     sizeToScene()
     resizable = false
     val mainMenuView = MainMenuView(800, 600)
-    val menuController = MenuController(mainMenuView)
-    scene = menuController.view
+    val mainMenuController = MainMenuController(mainMenuView)
+    scene = mainMenuController.view
   }
 }
