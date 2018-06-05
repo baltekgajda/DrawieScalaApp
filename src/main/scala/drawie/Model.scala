@@ -11,21 +11,21 @@ import sun.misc.BASE64Decoder
 import scala.collection.mutable.ListBuffer
 
 
-case class Model() {
+object Model {
   val hostURL = "https://drawie.herokuapp.com/"
 
   var socket: Socket = _
 
-  object RoomJoining{
-    def joinRoom(url: String): Unit = {
-      socket = IO.socket(url)
-      configureSocket();
-      socket.connect()
-    }
+  var roomUrl:String = _
 
-    def newRoom(): Unit = {
-      joinRoom(hostURL + "?room=" + generateRandomUUID())
-    }
+  def joinRoom(url: String): Unit = {
+    socket = IO.socket(url)
+    configureSocket();
+    socket.connect()
+  }
+
+  def newRoom(): Unit = {
+    joinRoom(hostURL + "?room=" + generateRandomUUID())
   }
 
 
@@ -73,18 +73,18 @@ case class Model() {
       val lineCap = opt.getString("lineCap");
       val fillStyle = opt.getString("fillStyle");
       val lineWidth = opt.getInt("lineWidth");
-      val jsonStroke:JSONArray = stroke.getJSONArray("stroke");
+      val jsonStroke: JSONArray = stroke.getJSONArray("stroke");
 
       var strToDraw = new ListBuffer[Int]()
-      for (i<-0 until jsonStroke.length()){
-        strToDraw+=jsonStroke.getJSONArray(i).getInt(0)
-        strToDraw+=jsonStroke.getJSONArray(i).getInt(1)
+      for (i <- 0 until jsonStroke.length()) {
+        strToDraw += jsonStroke.getJSONArray(i).getInt(0)
+        strToDraw += jsonStroke.getJSONArray(i).getInt(1)
       }
       val strokeToDraw = strToDraw.toList;
       println(strokeToDraw);
       // TODO drawStroke roomController.drawStrokeBCOnCanvas(color, lineCap, fillStyle, lineWidth, stroke);
     } catch {
-        case je: JSONException =>   je.printStackTrace();
+      case je: JSONException => je.printStackTrace();
     }
 
   }
