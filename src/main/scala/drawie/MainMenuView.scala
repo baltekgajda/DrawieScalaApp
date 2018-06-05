@@ -13,20 +13,20 @@ case class MainMenuView(sceneWidth: Double, sceneHeight: Double) extends Scene(s
   val joinRoomButton: Button = createButton(344.0, 337.0, 108.0, "Join Room")
   val exitButton: Button = createButton(344.0, 410.0, 108.0, "Exit")
 
-  private val titleText: Text = new Text {
-    this.layoutX = 257.0
-    this.layoutY = 250.0
-    this.text = "DRAWIE"
-    this.styleClass = List("drawie-title")
-  }
-
-  private val urlTextField: TextField = new TextField {
+  val urlTextField: TextField = new TextField {
     this.layoutX = 216.0
     this.layoutY = 374.0
     this.prefHeight = 25.0
     this.prefWidth = 365.0
     this.promptText = "type url of existing drawie room"
     this.styleClass = List("text-field")
+  }
+
+  private val titleText: Text = new Text {
+    this.layoutX = 257.0
+    this.layoutY = 250.0
+    this.text = "DRAWIE"
+    this.styleClass = List("drawie-title")
   }
 
   private val scenePane: Pane = new Pane {

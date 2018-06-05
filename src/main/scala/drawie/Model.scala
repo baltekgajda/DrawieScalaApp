@@ -18,7 +18,11 @@ object Model {
 
   var socket: Socket = _
 
-  var roomUrl:String = _
+  var roomUrl: String = _
+
+  def newRoom(): Boolean = {
+    joinRoom(hostURL + "?room=" + generateRandomUUID())
+  }
 
   var mStroke:List[List[Int]] = List()
 
@@ -28,8 +32,8 @@ object Model {
       socket = IO.socket(url)
     }
     catch {
-      case e:URISyntaxException => return false
-      case e:RuntimeException => return false
+      case e: URISyntaxException => return false
+      case e: RuntimeException => return false
     }
     configureSocket();
     socket.connect()
