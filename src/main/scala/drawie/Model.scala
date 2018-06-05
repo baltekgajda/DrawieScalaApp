@@ -17,7 +17,11 @@ object Model {
 
   var socket: Socket = _
 
-  var roomUrl:String = _
+  var roomUrl: String = _
+
+  def newRoom(): Boolean = {
+    joinRoom(hostURL + "?room=" + generateRandomUUID())
+  }
 
   def joinRoom(url: String): Boolean = {
     if (url.length == 0) return false
@@ -25,21 +29,12 @@ object Model {
       socket = IO.socket(url)
     }
     catch {
-      case e:URISyntaxException => return false
-      case e:RuntimeException => return false
+      case e: URISyntaxException => return false
+      case e: RuntimeException => return false
     }
     configureSocket();
     socket.connect()
     true
-  }
-
-  def newRoom(): Boolean = {
-    joinRoom(hostURL + "?room=" + generateRandomUUID())
-  }
-
-
-  def generateRandomUUID(): String = {
-    UUID.randomUUID().toString
   }
 
   def configureSocket(): Unit = {
@@ -95,5 +90,9 @@ object Model {
       case je: JSONException => je.printStackTrace();
     }
 
+  }
+
+  def generateRandomUUID(): String = {
+    UUID.randomUUID().toString
   }
 }
