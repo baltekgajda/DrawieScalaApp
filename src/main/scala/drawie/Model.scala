@@ -132,12 +132,39 @@ object Model {
 
   def manageOnMouseDragged(fillSelected: Boolean, x: Int, y: Int): Unit = {
     if (fillSelected) return
-    mStroke:+(List[Int](x, y))
+    mStroke:+List[Int](x, y)
    // roomController.drawUserStroke(x, y) TODO draw user stroke
   }
 
   def manageOnMouseReleased(fillSelected: Boolean, color: Color, lineCap: String, fillStyle: String, lineWidth: Int): Unit = {
     if (fillSelected) return
-   // sendStroke(color, lineCap, fillStyle, lineWidth, mStroke) TODO send stroke
+    sendStroke(color, lineCap, fillStyle, lineWidth, mStroke)
+  }
+
+  def handleRedoClick(): Unit = {
+    socket.emit("redo")
+  }
+
+  def handleUndoClick(): Unit = {
+    socket.emit("undo")
+  }
+
+  def sendStroke(color: Color, lineCap: String, fillStyle: String, lineWidth: Int, mStroke: List[List[Int]]): Unit = {
+    val strokeObj = new JSONObject
+    val options = new JSONObject
+    val stroke = new JSONArray
+    try {
+      mStroke.foreach(stroke.put(_))
+      options.put("strokeStyle", hexColorToHashFormat(color))
+      options.put("lineCap", lineCap)
+      options.put("fillStyle", fillStyle)
+      options.put("lineWidth", lineWidth)
+      strokeObj.put("options", options)
+      strokeObj.put("stroke", stroke)
+    } catch {
+      case e: JSONException =>
+        e.printStackTrace()
+    }
+    socket.emit("stroke", strokeObj)
   }
 }
