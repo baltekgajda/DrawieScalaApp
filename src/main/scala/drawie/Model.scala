@@ -20,7 +20,7 @@ object Model {
 
   var roomUrl:String = _
 
-  var  mStroke:List[List[Int]] = List()
+  var mStroke:List[List[Int]] = List()
 
   def joinRoom(url: String): Boolean = {
     if (url.length == 0) return false
