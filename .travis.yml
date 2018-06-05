@@ -1,0 +1,10 @@
+language: scala
+
+scala:
+  - 2.12.6
+
+script:
+  - sbt clean coverage test coverageReport
+
+after_success:
+  - bash <(curl -s https://codecov.io/bash) -t ccd173d3-26b6-4a3c-9103-9b2516fa6dca
