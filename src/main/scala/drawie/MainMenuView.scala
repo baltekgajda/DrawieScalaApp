@@ -5,9 +5,7 @@ import scalafx.scene.control.{Button, TextField}
 import scalafx.scene.layout.Pane
 import scalafx.scene.text.Text
 
-case class MainMenu(sceneHeight: Double, sceneWidth: Double) extends Scene {
-
-  import MainMenu._
+case class MainMenuView(sceneWidth: Double, sceneHeight: Double) extends Scene(sceneWidth, sceneHeight) {
 
   private val titleText: Text = new Text {
     this.layoutX = 257.0
@@ -28,6 +26,7 @@ case class MainMenu(sceneHeight: Double, sceneWidth: Double) extends Scene {
     this.promptText = "type url of existing drawie room"
     this.styleClass = List("text-field")
   }
+
   private val scenePane: Pane = new Pane {
     this.prefHeight = sceneHeight
     this.prefWidth = sceneWidth
@@ -37,10 +36,8 @@ case class MainMenu(sceneHeight: Double, sceneWidth: Double) extends Scene {
 
   stylesheets = List(getClass.getClassLoader.getResource("styles.css").toExternalForm)
   content = scenePane
-}
 
-object MainMenu {
-  def createButton(bLayoutX: Double, bLayoutY: Double, bWidth: Double, text: String): Button = new Button(text) {
+  private def createButton(bLayoutX: Double, bLayoutY: Double, bWidth: Double, text: String): Button = new Button(text) {
     this.layoutX = bLayoutX
     this.layoutY = bLayoutY
     this.prefWidth = bWidth
