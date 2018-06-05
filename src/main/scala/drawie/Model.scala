@@ -1,6 +1,7 @@
 package drawie
 
 import java.io.{ByteArrayInputStream, IOException}
+import java.net.URISyntaxException
 import java.util.UUID
 
 import io.socket.client.{IO, Socket}
@@ -18,13 +19,21 @@ object Model {
 
   var roomUrl:String = _
 
-  def joinRoom(url: String): Unit = {
-    socket = IO.socket(url)
+  def joinRoom(url: String): Boolean = {
+    if (url.length == 0) return false
+    try {
+      socket = IO.socket(url)
+    }
+    catch {
+      case e:URISyntaxException => return false
+      case e:RuntimeException => return false
+    }
     configureSocket();
     socket.connect()
+    true
   }
 
-  def newRoom(): Unit = {
+  def newRoom(): Boolean = {
     joinRoom(hostURL + "?room=" + generateRandomUUID())
   }
 
