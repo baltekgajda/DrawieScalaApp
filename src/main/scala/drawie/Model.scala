@@ -7,6 +7,7 @@ import java.util.UUID
 import io.socket.client.{IO, Socket}
 import io.socket.emitter.Emitter
 import org.json.{JSONArray, JSONException, JSONObject}
+import scalafx.scene.paint.Color
 import sun.misc.BASE64Decoder
 
 import scala.collection.mutable.ListBuffer
@@ -19,6 +20,8 @@ object Model {
 
   var roomUrl:String = _
 
+  var  mStroke:List[List[Int]] = List()
+
   def joinRoom(url: String): Boolean = {
     if (url.length == 0) return false
     try {
@@ -30,6 +33,8 @@ object Model {
     }
     configureSocket();
     socket.connect()
+
+    roomUrl = url;
     true
   }
 
@@ -96,5 +101,44 @@ object Model {
       case je: JSONException => je.printStackTrace();
     }
 
+  }
+
+
+  private def hexColorToHashFormat(color: Color) = "#" + color.toString.substring(2, 8)
+
+  def bucketFill(x: Int, y: Int, color: Color): Unit = {
+    val floodFillObj = new JSONObject
+    try {
+      floodFillObj.put("x", x)
+      floodFillObj.put("y", y)
+      floodFillObj.put("color", hexColorToHashFormat(color))
+    } catch {
+      case e: JSONException =>
+        e.printStackTrace()
+        return
+    }
+    socket.emit("floodFill", floodFillObj)
+  }
+
+
+  def manageOnMousePressed(fillSelected: Boolean, x: Int, y: Int, color: Color): Unit = {
+    if (fillSelected) {
+      bucketFill(x, y, color)
+      return
+    }
+    mStroke = List()
+    mStroke:+(Array[Int](x, y))
+    //roomController.beginUserStroke(x, y) TODO begin user stroke
+  }
+
+  def manageOnMouseDragged(fillSelected: Boolean, x: Int, y: Int): Unit = {
+    if (fillSelected) return
+    mStroke:+(List[Int](x, y))
+   // roomController.drawUserStroke(x, y) TODO draw user stroke
+  }
+
+  def manageOnMouseReleased(fillSelected: Boolean, color: Color, lineCap: String, fillStyle: String, lineWidth: Int): Unit = {
+    if (fillSelected) return
+   // sendStroke(color, lineCap, fillStyle, lineWidth, mStroke) TODO send stroke
   }
 }
