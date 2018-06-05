@@ -7,6 +7,8 @@ import scalafx.scene.text.Text
 
 case class MainMenuView(sceneWidth: Double, sceneHeight: Double) extends Scene(sceneWidth, sceneHeight) {
 
+  import MainMenuView._
+
   private val titleText: Text = new Text {
     this.layoutX = 257.0
     this.layoutY = 250.0
@@ -36,8 +38,10 @@ case class MainMenuView(sceneWidth: Double, sceneHeight: Double) extends Scene(s
 
   stylesheets = List(getClass.getClassLoader.getResource("styles.css").toExternalForm)
   content = scenePane
+}
 
-  private def createButton(bLayoutX: Double, bLayoutY: Double, bWidth: Double, text: String): Button = new Button(text) {
+object MainMenuView {
+  def createButton(bLayoutX: Double, bLayoutY: Double, bWidth: Double, text: String): Button = new Button(text) {
     this.layoutX = bLayoutX
     this.layoutY = bLayoutY
     this.prefWidth = bWidth

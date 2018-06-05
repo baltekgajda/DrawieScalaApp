@@ -65,8 +65,8 @@ case class RoomView(sceneWidth: Double, sceneHeight: Double) extends Scene(scene
     this.children = List(toolsHBox, canvasStackPane)
   }
 
-  private val menuButton: Button = createButton(715.0, 14.0, 70.0, "Menu")
-  private val copyURLButton: Button = createButton(715.0, 50.0, 70.0, "Copy URL")
+  private val menuButton: Button = MainMenuView.createButton(715.0, 14.0, 70.0, "Menu")
+  private val copyURLButton: Button = MainMenuView.createButton(715.0, 50.0, 70.0, "Copy URL")
 
   private val scenePane: Pane = new Pane {
     this.prefHeight = sceneHeight
