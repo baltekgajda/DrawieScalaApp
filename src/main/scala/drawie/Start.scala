@@ -15,5 +15,7 @@ object Start extends JFXApp {
     val mainMenu = MainMenuView(800, 600)
     val menuController = MenuController(mainMenu)
     scene = menuController.view
+    val model = Model(null, null)
+    //model.joinRoom("https://drawie.herokuapp.com/?room=3332b08b-a9f5-4c40-941c-9ea26a3c5ef1");
   }
 }

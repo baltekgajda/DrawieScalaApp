@@ -6,7 +6,6 @@ import java.util.UUID
 import io.socket.client.{IO, Socket}
 import io.socket.emitter.Emitter
 import org.json.{JSONException, JSONObject}
-import scalafx.scene.image.Image
 import sun.misc.BASE64Decoder
 
 
@@ -48,16 +47,10 @@ case class Model(var socket: Socket) {
 
 
   def manageReceivedDumpBC(dump: JSONObject): Unit = {
-    try
-      val imgInB64 = dump.getString("snapshot").split(",")
-      val inputStream = new ByteArrayInputStream(new BASE64Decoder().decodeBuffer(imgInB64(imgInB64.length - 1)))
-    //roomController.drawDumpBCOnCanvas(new Image(inputStream)) //TODO daj odkomentowac jak bedzie kontroler
-    catch {
-      case e: JSONException =>
-        e.printStackTrace()
-      case e: IOException =>
-        e.printStackTrace()
-    }
+    println(dump)
+    val imgInB64 = dump.getString("snapshot").split(",");
+    val inputStream = new ByteArrayInputStream(new BASE64Decoder().decodeBuffer(imgInB64(imgInB64.length - 1)));
+   // gc.drawImage(new Image(inputStream), 0,0) draw image
   }
 
   def manageReceivedStrokeBC(stroke: JSONObject): Unit = {
