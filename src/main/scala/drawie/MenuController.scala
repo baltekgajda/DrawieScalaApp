@@ -10,12 +10,14 @@ case class MenuController(view: MainMenuView) {
     val roomView = RoomView(800, 600) //TODO dodac te wielkosci gdzies
     val roomController = RoomController(roomView)
     startApp.stage.scene = roomController.view
+    Model.roomView = roomView
     Model.newRoom()
   }
 
   view.joinRoomButton.onMouseClicked = (e: MouseEvent) => {
     if (Model.joinRoom(view.urlTextField.text.value)) {
-      val roomView = RoomView(800, 600)                   //TODO dodac te wielkosci gdzies
+      val roomView = RoomView(800, 600) //TODO dodac te wielkosci gdzies
+      Model.roomView = roomView
       val roomController = RoomController(roomView)
       startApp.stage.scene = roomController.view
     }

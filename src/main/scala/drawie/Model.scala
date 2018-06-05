@@ -7,6 +7,7 @@ import java.util.UUID
 import io.socket.client.{IO, Socket}
 import io.socket.emitter.Emitter
 import org.json.{JSONArray, JSONException, JSONObject}
+import scalafx.scene.image.Image
 import scalafx.scene.paint.Color
 import sun.misc.BASE64Decoder
 
@@ -19,6 +20,8 @@ object Model {
   var socket: Socket = _
 
   var roomUrl: String = _
+
+  var roomView:RoomView = _
 
   def newRoom(): Boolean = {
     joinRoom(hostURL + "?room=" + generateRandomUUID())
@@ -41,11 +44,6 @@ object Model {
     roomUrl = url;
     true
   }
-
-  def newRoom(): Boolean = {
-    joinRoom(hostURL + "?room=" + generateRandomUUID())
-  }
-
 
   def generateRandomUUID(): String = {
     UUID.randomUUID().toString
@@ -75,7 +73,8 @@ object Model {
     try {
       val imgInB64 = dump.getString("snapshot").split(",");
       val inputStream = new ByteArrayInputStream(new BASE64Decoder().decodeBuffer(imgInB64(imgInB64.length - 1)));
-      //TODO przekazanie new Image(inputStream) do controllera
+      roomView.loadingStackPane.visible = false
+      roomView.drawDump(new Image(inputStream))
     } catch {
       case ioe: IOException => println(ioe) // more specific cases first !
       case e: Exception => println(e)

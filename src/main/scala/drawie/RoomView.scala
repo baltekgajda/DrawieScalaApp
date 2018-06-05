@@ -94,4 +94,8 @@ case class RoomView(sceneWidth: Double, sceneHeight: Double) extends Scene(scene
     this.fitHeight = iFitHeight
     this.image = new Image(getClass.getResourceAsStream(path))
   }
+
+  def drawDump(image:Image): Unit ={
+    roomCanvas.graphicsContext2D.drawImage(image, 0, 0)
+  }
 }
