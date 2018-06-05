@@ -1,0 +1,87 @@
+.button {
+    -fx-min-width: 24px;
+    -fx-min-height: 24px;
+    -fx-background-color: #CCCCCC;
+    -fx-border-radius: 5px;
+    -fx-padding: 0px;
+}
+
+.button:hover {
+    -fx-background-color: #D2D2D7;
+}
+
+.button:pressed {
+    -fx-background-color: #9a9a9f;
+}
+
+.color-picker{
+    -fx-min-width: 30px;
+    -fx-pref-height: 24px;
+    -fx-background-color: #CCCCCC;
+    -fx-background-radius: 5px;
+}
+
+.color-picker:hover {
+    -fx-background-color: #D2D2D7;
+}
+
+.color-picker:pressed {
+    -fx-background-color: #9a9a9f;
+}
+
+.slider {
+    -fx-min-width: 100px;
+    -fx-pref-height: 24px;
+    -fx-background-color: #CCCCCC;
+    -fx-background-radius: 5px;
+    -fx-padding: 0 5 0 5;
+}
+
+.slider .track {
+    -fx-pref-height: 7px;
+    -fx-alignment: center;
+    -fx-background-color: #eeeeef;
+    -fx-background-radius: 3px;
+}
+
+.slider .thumb {
+    -fx-pref-width: 7px;
+    -fx-pref-height: 10px;
+    -fx-background-color: #292929;
+    -fx-background-radius: 2px;
+}
+
+.slider:hover {
+    -fx-background-color: #D2D2D7;
+}
+
+.text-field {
+    -fx-border-radius: 5px;
+    -fx-background-radius: 5px;
+    -fx-background-color: white;
+    -fx-border-color: #cccccc;
+    -fx-border-width: 1px;
+    -fx-text-fill: #b5b5b5;
+    -fx-alignment: center;
+}
+
+.text-field:hover {
+    -fx-border-width: 2px;
+}
+
+.toggle-button {
+    -fx-min-width: 24px;
+    -fx-min-height: 24px;
+    -fx-background-color: #CCCCCC;
+    -fx-border-radius: 5px;
+    -fx-padding: 0px;
+}
+
+.toggle-button:hover {
+    -fx-background-color: #D2D2D7;
+}
+
+.toggle-button:selected {
+    -fx-background-color: #9a9a9f;
+}
+
