@@ -97,8 +97,7 @@ object Model {
         strToDraw += jsonStroke.getJSONArray(i).getInt(1)
       }
       val strokeToDraw = strToDraw.toList;
-      println(strokeToDraw);
-      // TODO drawStroke roomController.drawStrokeBCOnCanvas(color, lineCap, fillStyle, lineWidth, stroke);
+      roomView.drawStrokeOnCanvas(color, lineCap, fillStyle, lineWidth, strokeToDraw);
     } catch {
       case je: JSONException => je.printStackTrace();
     }

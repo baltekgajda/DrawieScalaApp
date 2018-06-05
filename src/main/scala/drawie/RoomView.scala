@@ -5,6 +5,7 @@ import scalafx.scene.control.{Button, ColorPicker, Slider, ToggleButton}
 import scalafx.scene.image.{Image, ImageView}
 import scalafx.scene.layout.{HBox, Pane, StackPane, VBox}
 import scalafx.scene.paint.Color
+import scalafx.scene.shape.StrokeLineCap
 import scalafx.scene.text.Text
 import scalafx.scene.{AccessibleRole, Scene}
 
@@ -95,7 +96,31 @@ case class RoomView(sceneWidth: Double, sceneHeight: Double) extends Scene(scene
     this.image = new Image(getClass.getResourceAsStream(path))
   }
 
-  def drawDump(image:Image): Unit ={
+  def drawDump(image: Image): Unit = {
     roomCanvas.graphicsContext2D.drawImage(image, 0, 0)
   }
+
+
+  def drawStrokeOnCanvas(color: String, lineCap: String, fillStyle: String, lineWidth: Int, stroke: List[Int]): Unit = {
+    val gc = roomCanvas.graphicsContext2D
+    gc.setStroke(Color.web(color))
+    lineCap match {
+      case "round" =>
+        gc.setLineCap(StrokeLineCap.Round)
+      case "square" =>
+        gc.setLineCap(StrokeLineCap.Square)
+      case _ =>
+        gc.setLineCap(StrokeLineCap.Butt)
+    }
+    //TODO setFillStyle?
+    gc.setLineWidth(lineWidth)
+    //drawStroke
+    gc.beginPath
+    for (List(x,y)<-stroke.grouped(2)){
+      gc.lineTo(x, y)
+      gc.stroke()
+    }
+
+  }
+
 }
