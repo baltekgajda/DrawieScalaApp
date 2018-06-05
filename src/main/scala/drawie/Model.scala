@@ -52,7 +52,6 @@ object Model {
     socket.on("strokeBC", strokeListener)
   }
 
-
   def manageReceivedDumpBC(dump: JSONObject): Unit = {
     println(dump)
     try {

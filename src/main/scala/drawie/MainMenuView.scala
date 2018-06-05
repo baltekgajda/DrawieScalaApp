@@ -9,16 +9,16 @@ case class MainMenuView(sceneWidth: Double, sceneHeight: Double) extends Scene(s
 
   import MainMenuView._
 
+  val newRoomButton: Button = createButton(344.0, 300.0, 108.0, "New Room")
+  val joinRoomButton: Button = createButton(344.0, 337.0, 108.0, "Join Room")
+  val exitButton: Button = createButton(344.0, 410.0, 108.0, "Exit")
+
   private val titleText: Text = new Text {
     this.layoutX = 257.0
     this.layoutY = 250.0
     this.text = "DRAWIE"
     this.styleClass = List("drawie-title")
   }
-
-  val newRoomButton: Button = createButton(344.0, 300.0, 108.0, "New Room")
-  val joinRoomButton: Button = createButton(344.0, 337.0, 108.0, "Join Room")
-  val exitButton: Button = createButton(344.0, 410.0, 108.0, "Exit")
 
   private val urlTextField: TextField = new TextField {
     this.layoutX = 216.0
