@@ -10,12 +10,11 @@ object Start extends JFXApp {
     title = "Drawie"
     icons.add(new Image(getClass.getResourceAsStream("/images/DrawieIcon.bmp")))
     centerOnScreen()
-    height = 600
-    width = 800
+    sizeToScene()
     resizable = false
-    val mainMenu = MainMenu(height.getValue, width.getValue)
-    val menuController = MenuController(mainMenu)
-    scene = menuController.view
-    val model = Model(null)
+    val mainMenu = RoomView(800, 600)
+    //val menuController = MenuController(mainMenu)
+    /*scene = menuController.view*/
+    scene = mainMenu
   }
 }

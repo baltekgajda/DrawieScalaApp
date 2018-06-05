@@ -1,5 +1,5 @@
 package drawie
 
-case class MenuController(view: MainMenu) {
-  
+case class MenuController(view: MainMenuView) {
+
 }
