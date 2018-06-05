@@ -14,6 +14,7 @@ case class MenuController(view: MainMenuView) {
 
   view.joinRoomButton.onMouseClicked = (e: MouseEvent) => {
     println("Join Room Button")
+    RoomJoining
   }
 
   view.exitButton.onMouseClicked = (e: MouseEvent) => {

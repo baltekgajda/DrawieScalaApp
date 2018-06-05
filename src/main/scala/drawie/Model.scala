@@ -5,23 +5,29 @@ import java.util.UUID
 
 import io.socket.client.{IO, Socket}
 import io.socket.emitter.Emitter
-import org.json.{JSONException, JSONObject}
+import org.json.{JSONArray, JSONException, JSONObject}
 import sun.misc.BASE64Decoder
 
+import scala.collection.mutable.ListBuffer
 
-case class Model(var socket: Socket) {
+
+case class Model() {
   val hostURL = "https://drawie.herokuapp.com/"
 
+  var socket: Socket = _
 
-  def joinRoom(url: String): Unit = {
-    socket = IO.socket(url)
-    configureSocket();
-    socket.connect()
+  object RoomJoining{
+    def joinRoom(url: String): Unit = {
+      socket = IO.socket(url)
+      configureSocket();
+      socket.connect()
+    }
+
+    def newRoom(): Unit = {
+      joinRoom(hostURL + "?room=" + generateRandomUUID())
+    }
   }
 
-  def newRoom(): Unit = {
-    joinRoom(hostURL + "?room=" + generateRandomUUID())
-  }
 
   def generateRandomUUID(): String = {
     UUID.randomUUID().toString
@@ -43,17 +49,43 @@ case class Model(var socket: Socket) {
     }
 
     socket.on("dumpBC", dumpListener)
+    socket.on("strokeBC", strokeListener)
   }
 
 
   def manageReceivedDumpBC(dump: JSONObject): Unit = {
     println(dump)
-    val imgInB64 = dump.getString("snapshot").split(",");
-    val inputStream = new ByteArrayInputStream(new BASE64Decoder().decodeBuffer(imgInB64(imgInB64.length - 1)));
-   // gc.drawImage(new Image(inputStream), 0,0) draw image
+    try {
+      val imgInB64 = dump.getString("snapshot").split(",");
+      val inputStream = new ByteArrayInputStream(new BASE64Decoder().decodeBuffer(imgInB64(imgInB64.length - 1)));
+      //TODO przekazanie new Image(inputStream) do controllera
+    } catch {
+      case ioe: IOException => println(ioe) // more specific cases first !
+      case e: Exception => println(e)
+    }
+
   }
 
   def manageReceivedStrokeBC(stroke: JSONObject): Unit = {
+    try {
+      val opt = stroke.getJSONObject("options");
+      val color = opt.getString("strokeStyle");
+      val lineCap = opt.getString("lineCap");
+      val fillStyle = opt.getString("fillStyle");
+      val lineWidth = opt.getInt("lineWidth");
+      val jsonStroke:JSONArray = stroke.getJSONArray("stroke");
+
+      var strToDraw = new ListBuffer[Int]()
+      for (i<-0 until jsonStroke.length()){
+        strToDraw+=jsonStroke.getJSONArray(i).getInt(0)
+        strToDraw+=jsonStroke.getJSONArray(i).getInt(1)
+      }
+      val strokeToDraw = strToDraw.toList;
+      println(strokeToDraw);
+      // TODO drawStroke roomController.drawStrokeBCOnCanvas(color, lineCap, fillStyle, lineWidth, stroke);
+    } catch {
+        case je: JSONException =>   je.printStackTrace();
+    }
 
   }
 }

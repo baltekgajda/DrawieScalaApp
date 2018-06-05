@@ -14,8 +14,14 @@ object Start extends JFXApp {
     resizable = false
     val mainMenuView = MainMenuView(800, 600)
     val menuController = MenuController(mainMenuView)
-    scene = menuController.view
-/*    val model = Model(null)
-    model.joinRoom("https://drawie.herokuapp.com/?room=3332b08b-a9f5-4c40-941c-9ea26a3c5ef1");*/
+    //scene = menuController.view
+
+    // to moje takie notatki ponizej tej linii mozna usunac
+    val roomView = RoomView(800, 600)
+    val roomController = RoomController(roomView)
+    scene = roomController.view
+
+    val model = Model()
+    //model.joinRoom("https://drawie.herokuapp.com/?room=3332b08b-a9f5-4c40-941c-9ea26a3c5ef1");
   }
 }
