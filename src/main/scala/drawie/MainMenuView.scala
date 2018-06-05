@@ -16,9 +16,9 @@ case class MainMenuView(sceneWidth: Double, sceneHeight: Double) extends Scene(s
     this.styleClass = List("drawie-title")
   }
 
-  private val newRoomButton: Button = createButton(344.0, 300.0, 108.0, "New Room")
-  private val joinRoomButton: Button = createButton(344.0, 337.0, 108.0, "Join Room")
-  private val exitButton: Button = createButton(344.0, 410.0, 108.0, "Exit")
+  val newRoomButton: Button = createButton(344.0, 300.0, 108.0, "New Room")
+  val joinRoomButton: Button = createButton(344.0, 337.0, 108.0, "Join Room")
+  val exitButton: Button = createButton(344.0, 410.0, 108.0, "Exit")
 
   private val urlTextField: TextField = new TextField {
     this.layoutX = 216.0
