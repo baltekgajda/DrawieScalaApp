@@ -9,8 +9,8 @@ import scalafx.scene.{AccessibleRole, Scene}
 
 case class RoomView(sceneWidth: Double, sceneHeight: Double) extends Scene(sceneWidth, sceneHeight) {
 
-  private val serverCanvas: Canvas = new Canvas(500.0, 500.0)
-  private val roomCanvas: Canvas = new Canvas(500.0, 500.0)
+  val serverCanvas: Canvas = new Canvas(500.0, 500.0)
+  val roomCanvas: Canvas = new Canvas(500.0, 500.0)
 
   private val canvasStackPane: StackPane = new StackPane {
     this.prefHeight = 500.0
@@ -18,14 +18,14 @@ case class RoomView(sceneWidth: Double, sceneHeight: Double) extends Scene(scene
     this.children = List(serverCanvas, roomCanvas)
   }
 
-  private val paintbrushWidthSlider = new Slider {
+  val paintbrushWidthSlider = new Slider {
     this.min = 1.0
     this.max = 30.0
     this.minHeight = 26.0
     this.styleClass = List("slider")
   }
 
-  private val colorPicker = new ColorPicker {
+  val colorPicker = new ColorPicker {
     this.accessibleRole = AccessibleRole.ImageView
     this.value = Color.Black
     this.prefWidth = 20.0
@@ -33,17 +33,17 @@ case class RoomView(sceneWidth: Double, sceneHeight: Double) extends Scene(scene
     this.styleClass = List("color-picker")
   }
 
-  private val bucketFillToggleButton = new ToggleButton {
+  val bucketFillToggleButton = new ToggleButton {
     this.graphic = createImageView(14.0, 14.0, "/images/BucketIcon.png")
     this.styleClass = List("toggle-button")
   }
 
-  private val undoButton: Button = new Button {
+  val undoButton: Button = new Button {
     this.graphic = createImageView(14.0, 14.0, "/images/UndoIcon.png")
     this.styleClass = List("custom-button")
   }
 
-  private val redoButton: Button = new Button {
+  val redoButton: Button = new Button {
     this.graphic = createImageView(14.0, 14.0, "/images/RedoIcon.png")
     this.styleClass = List("custom-button")
   }
@@ -65,8 +65,8 @@ case class RoomView(sceneWidth: Double, sceneHeight: Double) extends Scene(scene
     this.children = List(toolsHBox, canvasStackPane)
   }
 
-  private val menuButton: Button = MainMenuView.createButton(715.0, 14.0, 70.0, "Menu")
-  private val copyURLButton: Button = MainMenuView.createButton(715.0, 50.0, 70.0, "Copy URL")
+  val menuButton: Button = MainMenuView.createButton(715.0, 14.0, 70.0, "Menu")
+  val copyURLButton: Button = MainMenuView.createButton(715.0, 50.0, 70.0, "Copy URL")
 
   private val scenePane: Pane = new Pane {
     this.prefHeight = sceneHeight
@@ -77,11 +77,6 @@ case class RoomView(sceneWidth: Double, sceneHeight: Double) extends Scene(scene
 
   stylesheets = List(getClass.getClassLoader.getResource("styles.css").toExternalForm)
   content = scenePane
-
-  private def createToolButton(iFitWidth: Double, iFitHeight: Double, path: String): Button = new Button {
-    this.graphic = createImageView(iFitWidth, iFitHeight, path)
-    this.styleClass = List("custom-button")
-  }
 
   private def createImageView(iFitWidth: Double, iFitHeight: Double, path: String): ImageView = new ImageView {
     this.fitWidth = iFitWidth
