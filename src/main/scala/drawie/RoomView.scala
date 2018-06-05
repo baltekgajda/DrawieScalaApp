@@ -11,14 +11,14 @@ import scalafx.scene.{AccessibleRole, Scene}
 
 case class RoomView(sceneWidth: Double, sceneHeight: Double) extends Scene(sceneWidth, sceneHeight) {
 
-  val paintbrushWidthSlider = new Slider {
+  val paintbrushWidthSlider: Slider = new Slider {
     this.min = 1.0
     this.max = 30.0
     this.minHeight = 26.0
     this.styleClass = List("slider")
   }
 
-  val colorPicker = new ColorPicker {
+  val colorPicker: ColorPicker = new ColorPicker {
     this.accessibleRole = AccessibleRole.ImageView
     this.value = Color.Black
     this.prefWidth = 20.0
@@ -26,7 +26,7 @@ case class RoomView(sceneWidth: Double, sceneHeight: Double) extends Scene(scene
     this.styleClass = List("color-picker")
   }
 
-  val bucketFillToggleButton = new ToggleButton {
+  val bucketFillToggleButton: ToggleButton = new ToggleButton {
     this.graphic = createImageView(14.0, 14.0, "/images/BucketIcon.png")
     this.styleClass = List("toggle-button")
   }
@@ -45,7 +45,7 @@ case class RoomView(sceneWidth: Double, sceneHeight: Double) extends Scene(scene
   val copyURLButton: Button = MainMenuView.createButton(715.0, 50.0, 70.0, "Copy URL")
   val roomCanvas: Canvas = new Canvas(500.0, 500.0)
 
-  val loadingStackPane = new StackPane {
+  val loadingStackPane: StackPane = new StackPane {
     this.prefHeight = 500.0
     this.prefWidth = 500.0
     this.styleClass = List("loading-pane")
@@ -100,8 +100,8 @@ case class RoomView(sceneWidth: Double, sceneHeight: Double) extends Scene(scene
     roomCanvas.graphicsContext2D.drawImage(image, 0, 0)
   }
 
-
   def drawStrokeOnCanvas(color: String, lineCap: String, fillStyle: String, lineWidth: Int, stroke: List[Int]): Unit = {
+    //TODO
     val gc = roomCanvas.graphicsContext2D
     gc.setStroke(Color.web(color))
     lineCap match {

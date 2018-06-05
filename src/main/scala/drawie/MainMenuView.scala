@@ -13,7 +13,7 @@ case class MainMenuView(sceneWidth: Double, sceneHeight: Double) extends Scene(s
   val joinRoomButton: Button = createButton(344.0, 337.0, 108.0, "Join Room")
   val exitButton: Button = createButton(344.0, 410.0, 108.0, "Exit")
 
-  val urlTextField: TextField = new TextField {
+  private val urlTextField: TextField = new TextField {
     this.layoutX = 216.0
     this.layoutY = 374.0
     this.prefHeight = 25.0
@@ -38,6 +38,13 @@ case class MainMenuView(sceneWidth: Double, sceneHeight: Double) extends Scene(s
 
   stylesheets = List(getClass.getClassLoader.getResource("styles.css").toExternalForm)
   content = scenePane
+
+  def changeURLTextFieldPromptText(text: String): Unit = {
+    urlTextField.clear()
+    urlTextField.promptText = text
+  }
+
+  def getURLTextFieldText: String = urlTextField.text.value
 }
 
 object MainMenuView {

@@ -15,15 +15,14 @@ case class MenuController(view: MainMenuView) {
   }
 
   view.joinRoomButton.onMouseClicked = (e: MouseEvent) => {
-    if (Model.joinRoom(view.urlTextField.text.value)) {
+    if (Model.joinRoom(view.getURLTextFieldText)) {
       val roomView = RoomView(800, 600) //TODO dodac te wielkosci gdzies
-      Model.roomView = roomView
       val roomController = RoomController(roomView)
       startApp.stage.scene = roomController.view
+      Model.roomView = roomView
     }
     else {
-      view.urlTextField.clear()           //TODO a moze to w view?
-      view.urlTextField.promptText = "wrong URL"
+      view.changeURLTextFieldPromptText("wrong URL")
     }
   }
 
