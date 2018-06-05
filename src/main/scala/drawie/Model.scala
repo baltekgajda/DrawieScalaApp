@@ -25,8 +25,8 @@ object Model {
       socket = IO.socket(url)
     }
     catch {
-      case URISyntaxException => return false
-      case RuntimeException => return false
+      case e:URISyntaxException => return false
+      case e:RuntimeException => return false
     }
     configureSocket();
     socket.connect()
