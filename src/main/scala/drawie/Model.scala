@@ -21,13 +21,13 @@ object Model {
 
   var roomUrl: String = _
 
-  var roomView:RoomView = _
+  var roomView: RoomView = _
 
   def newRoom(): Boolean = {
     joinRoom(hostURL + "?room=" + generateRandomUUID())
   }
 
-  var mStroke:List[List[Int]] = List()
+  var mStroke: ListBuffer[List[Int]] = ListBuffer()
 
   def joinRoom(url: String): Boolean = {
     if (url.length == 0) return false
@@ -127,20 +127,20 @@ object Model {
       bucketFill(x, y, color)
       return
     }
-    mStroke = List()
-    mStroke:+(Array[Int](x, y))
-    //roomController.beginUserStroke(x, y) TODO begin user stroke
+    mStroke = ListBuffer()
+    mStroke += List[Int](x, y)
+    roomView.beginUserStroke(x, y)
   }
 
   def manageOnMouseDragged(fillSelected: Boolean, x: Int, y: Int): Unit = {
     if (fillSelected) return
-    mStroke:+List[Int](x, y)
-   // roomController.drawUserStroke(x, y) TODO draw user stroke
+    mStroke += List[Int](x, y)
+    roomView.drawUserStroke(x, y)
   }
 
-  def manageOnMouseReleased(fillSelected: Boolean, color: Color, lineCap: String, fillStyle: String, lineWidth: Int): Unit = {
+  def manageOnMouseReleased(fillSelected: Boolean): Unit = {
     if (fillSelected) return
-    sendStroke(color, lineCap, fillStyle, lineWidth, mStroke)
+    sendStroke(mStroke.toList)
   }
 
   def handleRedoClick(): Unit = {
@@ -151,13 +151,21 @@ object Model {
     socket.emit("undo")
   }
 
-  def sendStroke(color: Color, lineCap: String, fillStyle: String, lineWidth: Int, mStroke: List[List[Int]]): Unit = {
+  def sendStroke(mStroke: List[List[Int]]): Unit = {
+    //TODO tu bedzie do poprawki
+    //val color = roomView.colorPicker.value.value
+    val color = "#00ffff"
+    val lineCap = "round"
+    val fillStyle = "solid"
+    val lineWidth = roomView.paintbrushWidthSlider.value.value
     val strokeObj = new JSONObject
     val options = new JSONObject
     val stroke = new JSONArray
+    println(mStroke)
     try {
-      mStroke.foreach(stroke.put(_))
-      options.put("strokeStyle", hexColorToHashFormat(color))
+      mStroke.foreach(points => stroke.put(new JSONArray().put(points(0)).put(points(1))))
+      options.put("strokeStyle", color)
+        //hexColorToHashFormat(color)) TODO
       options.put("lineCap", lineCap)
       options.put("fillStyle", fillStyle)
       options.put("lineWidth", lineWidth)
@@ -167,6 +175,7 @@ object Model {
       case e: JSONException =>
         e.printStackTrace()
     }
+    println(strokeObj)
     socket.emit("stroke", strokeObj)
   }
 }

@@ -17,23 +17,28 @@ case class RoomController(view: RoomView) {
   }
 
   view.undoButton.onMouseClicked = (e: MouseEvent) => {
-    println("Undo Button")
+    Model.handleUndoClick()
   }
 
   view.redoButton.onMouseClicked = (e: MouseEvent) => {
-    println("Redo Button")
+    Model.handleRedoClick()
   }
 
   view.roomCanvas.onMousePressed = (e: MouseEvent) => {
     println("Canvas Pressed")
+    //TODO zla wartosc w tym colorPickerze
+    Model.manageOnMousePressed(view.bucketFillToggleButton.selected.value, e.sceneX.toInt, e.sceneY.toInt, view.colorPicker.value.value)
   }
 
   view.roomCanvas.onMouseDragged = (e: MouseEvent) => {
     println("Canvas Dragged")
+    Model.manageOnMouseDragged(view.bucketFillToggleButton.selected.value, e.sceneX.toInt, e.sceneY.toInt)
   }
 
   view.roomCanvas.onMouseReleased = (e: MouseEvent) => {
     println("Canvas Released")
+    //TODO
+    Model.manageOnMouseReleased(view.bucketFillToggleButton.selected.value)
   }
 }
 

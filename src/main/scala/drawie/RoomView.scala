@@ -1,6 +1,6 @@
 package drawie
 
-import scalafx.scene.canvas.Canvas
+import scalafx.scene.canvas.{Canvas, GraphicsContext}
 import scalafx.scene.control.{Button, ColorPicker, Slider, ToggleButton}
 import scalafx.scene.image.{Image, ImageView}
 import scalafx.scene.layout.{HBox, Pane, StackPane, VBox}
@@ -121,6 +121,22 @@ case class RoomView(sceneWidth: Double, sceneHeight: Double) extends Scene(scene
       gc.stroke()
     }
 
+  }
+
+  def drawUserStroke(x: Double, y: Double): Unit = {
+    val gc = roomCanvas.graphicsContext2D
+    println(x + "  " + y +"  "  + gc.lineWidth + " " + gc.stroke.toString())
+    gc.lineTo(x, y)
+    gc.stroke()
+  }
+
+  def beginUserStroke(x: Double, y: Double): Unit = {
+    val gc = roomCanvas.graphicsContext2D
+    gc.setLineWidth(this.paintbrushWidthSlider.value.value)
+    gc.setStroke(this.colorPicker.value.value)
+    gc.setLineCap(StrokeLineCap.ROUND)
+    gc.beginPath()
+    drawUserStroke(x, y)
   }
 
 }
