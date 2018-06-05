@@ -16,5 +16,6 @@ object Start extends JFXApp {
     val mainMenu = MainMenu(height.getValue, width.getValue)
     val menuController = MenuController(mainMenu)
     scene = menuController.view
+    val model = Model(null)
   }
 }
