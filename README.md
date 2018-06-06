@@ -6,7 +6,6 @@
 Drawie is a desktop application designed to give you the ability to quickly visualize your ideas as drawings and share them with your friends. Thanks to application optimalization, changes made by your friends can be seen immediately. Moreover, you can use it online with others or enjoy drawing offline in single-user mode.
 
 Web version of Drawie is also available - https://drawie.herokuapp.com.  It is fully compatible with our desktop application, so sharing drawings between app and browser is not a problem.
-<br><br>
 ## How to use Drawie?
 It takes only seconds to start drawing! When you open the app, choose between creating the new room or joining the existing one (you will need the room URL - ask your friends to send you). Wait for the canvas to load and that's it. Now it's time to start creating your masterpiece!
 
