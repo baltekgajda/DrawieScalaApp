@@ -81,18 +81,14 @@ object Model {
   }
 
   private def configureSocket(): Unit = {
-    val dumpListener: Emitter.Listener = new Emitter.Listener() { //TODO co to za warning dziwny ?
-      override def call(args: AnyRef*): Unit = {
-        val dump = args(0).asInstanceOf[JSONObject]
-        manageReceivedDumpBC(dump)
-      }
+    val dumpListener: Emitter.Listener = (args: Array[AnyRef]) => {
+      val dump: JSONObject = args.head.asInstanceOf[JSONObject]
+      manageReceivedDumpBC(dump)
     }
 
-    val strokeListener: Emitter.Listener = new Emitter.Listener {
-      override def call(args: AnyRef*): Unit = {
-        val stroke = args(0).asInstanceOf[JSONObject]
-        manageReceivedStrokeBC(stroke)
-      }
+    val strokeListener: Emitter.Listener = (args: Array[AnyRef]) => {
+      val stroke = args.head.asInstanceOf[JSONObject]
+      manageReceivedStrokeBC(stroke)
     }
 
     socket.on("dumpBC", dumpListener)
@@ -102,8 +98,8 @@ object Model {
   private def manageReceivedDumpBC(dump: JSONObject): Unit = try {
     val imgInB64 = dump.getString("snapshot").split(",") //todo CZY TO ponizej jest tez scaolowe?
     val inputStream = new ByteArrayInputStream(new BASE64Decoder().decodeBuffer(imgInB64(imgInB64.length - 1)))
-    roomView.endLoading()
     roomView.drawDump(new Image(inputStream))
+    roomView.endLoading()
   } catch { // TODO co z tym? cos trzeba dodac czy nie more specific cases first ! bo printfy to tak średnio chyba
     case ioe: IOException => ioe.printStackTrace()
     case e: Exception => e.printStackTrace() //TODO nie wystarczy jeden do obsluzenia tego

@@ -99,11 +99,13 @@ case class RoomView(sceneWidth: Double, sceneHeight: Double) extends Scene(scene
   def endLoading(): Unit = loadingStackPane.visible = false
 
   def drawDump(image: Image): Unit = {
-    roomCanvas.graphicsContext2D.drawImage(image, 0, 0)
+    serverCanvas.graphicsContext2D.clearRect(0, 0, roomCanvas.getWidth, roomCanvas.getHeight)
+    serverCanvas.graphicsContext2D.drawImage(image, 0, 0)
   }
 
   def drawStrokeOnCanvas(color: String, lineCap: String, fillStyle: String, lineWidth: Int, stroke: List[Int]): Unit = {
-    val gc = roomCanvas.graphicsContext2D
+    roomCanvas.getGraphicsContext2D.clearRect(0, 0, roomCanvas.getWidth, roomCanvas.getHeight)
+    val gc = serverCanvas.graphicsContext2D
     gc.setStroke(Color.web(color))
     gc.setLineWidth(lineWidth)
     //TODO setFillStyle?
