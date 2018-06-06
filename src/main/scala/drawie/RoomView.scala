@@ -108,6 +108,7 @@ case class RoomView(sceneWidth: Double, sceneHeight: Double) extends Scene(scene
     val gc = serverCanvas.graphicsContext2D
     gc.setStroke(Color.web(color))
     gc.setLineWidth(lineWidth)
+    println(fillStyle)
     //TODO setFillStyle?
     lineCap match {
       case "round" =>
