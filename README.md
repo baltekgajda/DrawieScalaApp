@@ -10,7 +10,7 @@ Web version of Drawie is also available - https://drawie.herokuapp.com.  It is f
 It takes only seconds to start drawing! When you open the app, choose between creating the new room or joining the existing one (you will need the room URL - ask your friends to send you). Wait for the canvas to load and that's it. Now it's time to start creating your masterpiece!
 
 ## Interface
-<img src="../readme/src/main/resources/images/Room.png">
+<img src="../master/src/main/resources/images/Room.png">
 
 User interface is intuitive and very simple. Let me walk you through the options.
 
