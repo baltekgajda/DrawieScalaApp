@@ -9,6 +9,11 @@ import scalafx.scene.shape.StrokeLineCap
 import scalafx.scene.text.Text
 import scalafx.scene.{AccessibleRole, Scene}
 
+/**
+  * View of the room
+  * @param sceneWidth widht of the room window
+  * @param sceneHeight height of the room window
+  */
 case class RoomView(sceneWidth: Double, sceneHeight: Double) extends Scene(sceneWidth, sceneHeight) {
 
   val undoButton: Button = new Button {
@@ -90,19 +95,46 @@ case class RoomView(sceneWidth: Double, sceneHeight: Double) extends Scene(scene
   stylesheets = List(getClass.getClassLoader.getResource("styles.css").toExternalForm)
   content = scenePane
 
+  /**
+    * Getting color chosen by user
+    * @return color chosen by user
+    */
   def getColorFromColorPicker: Color = new Color(colorPicker.getValue)
 
+  /**
+    * Getting width chosen by user
+    * @return width chosen by user
+    */
   def getPaintbrushWidth: Double = paintbrushWidthSlider.getValue
 
+  /**
+    *
+    * @return true if the button is pressed, false otherwise
+    */
   def isBucketFillButtonPressed: Boolean = bucketFillToggleButton.isSelected
 
+  /**
+    * Hide the loading pane when finished loading
+    */
   def endLoading(): Unit = loadingStackPane.visible = false
 
+  /**
+    * Drawing dump image on the canvas
+    * @param image image to be drawn
+    */
   def drawDump(image: Image): Unit = {
     serverCanvas.graphicsContext2D.clearRect(0, 0, roomCanvas.getWidth, roomCanvas.getHeight)
     serverCanvas.graphicsContext2D.drawImage(image, 0, 0)
   }
 
+  /**
+    * Drawing stroke from serwer on canvas
+    * @param color color of the stroke
+    * @param lineCap lineCap of the stroke
+    * @param fillStyle fillStyle of the stroke
+    * @param lineWidth width of the stroke
+    * @param stroke points of the stroke
+    */
   def drawStrokeOnCanvas(color: String, lineCap: String, fillStyle: String, lineWidth: Int, stroke: List[Int]): Unit = {
     roomCanvas.getGraphicsContext2D.clearRect(0, 0, roomCanvas.getWidth, roomCanvas.getHeight)
     val gc = serverCanvas.graphicsContext2D
@@ -125,6 +157,11 @@ case class RoomView(sceneWidth: Double, sceneHeight: Double) extends Scene(scene
     }
   }
 
+  /**
+    * Beginning drawing after mouse was pressed on canvas
+    * @param x x coordinate where the event of drawing was executed
+    * @param y y coordinate where the event of drawing was executed
+    */
   def beginUserStroke(x: Double, y: Double): Unit = {
     val gc = roomCanvas.graphicsContext2D
     gc.setLineWidth(getPaintbrushWidth)
@@ -134,12 +171,24 @@ case class RoomView(sceneWidth: Double, sceneHeight: Double) extends Scene(scene
     drawUserStroke(x, y)
   }
 
+  /**
+    * Drawing on the canvas stroke made by user
+    * @param x x coordinate where the event of drawing was executed
+    * @param y y coordinate where the event of drawing was executed
+    */
   def drawUserStroke(x: Double, y: Double): Unit = {
     val gc = roomCanvas.graphicsContext2D
     gc.lineTo(x, y)
     gc.stroke()
   }
 
+  /**
+    * Creating ImageView
+    * @param iFitWidth width to fit the image
+    * @param iFitHeight height to fit the image
+    * @param path path of the image
+    * @return image to imageView
+    */
   private def createImageView(iFitWidth: Double, iFitHeight: Double, path: String): ImageView = new ImageView {
     this.fitWidth = iFitWidth
     this.fitHeight = iFitHeight

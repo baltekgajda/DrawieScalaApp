@@ -15,6 +15,9 @@ import sun.misc.BASE64Decoder
 
 import scala.collection.mutable.ListBuffer
 
+/**
+  * Model of the application
+  */
 object Model {
 
   //TODO moze jednak daloby sie cos zrobic z varami? i czy moze private?
@@ -24,10 +27,19 @@ object Model {
   private var socket: Socket = _
   private var mStroke: ListBuffer[List[Int]] = ListBuffer() //TODO moze kolekcja co mozna zwiekszac ale val?
 
+  /**
+    * Creating new room id and joining the room
+    * @return true if joined the room, false otherwise
+    */
   def newRoom(): Boolean = {
     joinRoom(HOST_URL + "?room=" + generateRandomUUID())
   }
 
+  /**
+    * Joining the room with given url
+    * @param url url of the room
+    * @return true if joined the room, false otherwise
+    */
   def joinRoom(url: String): Boolean = {
     if (url.length != 0) {
       try
@@ -44,14 +56,27 @@ object Model {
       false
   }
 
+  /**
+    * Handling redo click and emitting event
+    */
   def handleRedoClick(): Unit = {
     socket.emit("redo")
   }
 
+  /**
+    * Handling undo click and emitting event
+    */
   def handleUndoClick(): Unit = {
     socket.emit("undo")
   }
 
+  /**
+    * Managing mouse pressed on the canvas
+    * @param x x coordinate where the event of drawing was created
+    * @param y y coordinate where the event of drawing was created
+    * @param fillSelected boolean if the fill is selected
+    * @param color color chosen by user
+    */
   def manageOnMousePressed(x: Int, y: Int, fillSelected: Boolean, color: Color): Unit = {
     if (fillSelected)
       bucketFill(x, y, color)
@@ -62,6 +87,12 @@ object Model {
     }
   }
 
+  /**
+    * Managing logic of the mouse dragged on canvas event
+    * @param x x of the event
+    * @param y y of the event
+    * @param fillSelected is the fill button selected
+    */
   def manageOnMouseDragged(x: Int, y: Int, fillSelected: Boolean): Unit = {
     if (!fillSelected) {
       mStroke += List[Int](x, y)
@@ -69,17 +100,27 @@ object Model {
     }
   }
 
+  /**
+    * Managing logic of the mouse released on canvas event
+    * @param fillSelected is the fill button selected
+    */
   def manageOnMouseReleased(fillSelected: Boolean): Unit = {
     if (!fillSelected)
       sendStroke(mStroke.toList)
   }
 
+  /**
+    * Copying url to clipboard
+    */
   def copyURLToClipboard(): Unit = {
     val selection = new StringSelection(roomUrl)
     val clipboard = Toolkit.getDefaultToolkit.getSystemClipboard
     clipboard.setContents(selection, selection)
   }
 
+  /**
+    * Configuring socket for receiving events
+    */
   private def configureSocket(): Unit = {
     val dumpListener: Emitter.Listener = (args: Array[AnyRef]) => {
       val dump: JSONObject = args.head.asInstanceOf[JSONObject]
@@ -95,6 +136,10 @@ object Model {
     socket.on("strokeBC", strokeListener)
   }
 
+  /**
+    * Managing received dump on socket
+    * @param dump dump received by socket
+    */
   private def manageReceivedDumpBC(dump: JSONObject): Unit = try {
     val imgInB64 = dump.getString("snapshot").split(",") //todo CZY TO ponizej jest tez scaolowe?
     val inputStream = new ByteArrayInputStream(new BASE64Decoder().decodeBuffer(imgInB64(imgInB64.length - 1)))
@@ -106,6 +151,10 @@ object Model {
     //plus czy musimy w ogole to tryowac?
   }
 
+  /**
+    * Managing stroke received by socket
+    * @param stroke stroke received by socket
+    */
   private def manageReceivedStrokeBC(stroke: JSONObject): Unit = try {
     val opt = stroke.getJSONObject("options")
     val color = opt.getString("strokeStyle")
@@ -123,10 +172,18 @@ object Model {
     case je: JSONException => je.printStackTrace();
   }
 
+  /**
+    * Generating random user id for the new room
+    * @return random user id
+    */
   private def generateRandomUUID(): String = {
     UUID.randomUUID().toString //TODO co ze scalowa wersja?
   }
 
+  /**
+    * Sending user's stroke to the serwer
+    * @param mStroke user's stroke points
+    */
   private def sendStroke(mStroke: List[List[Int]]): Unit = {
     val color = hexColorToHashFormat(roomView.getColorFromColorPicker)
     val lineCap = "round"
@@ -151,8 +208,19 @@ object Model {
   }
 
   //TODO problemy z #000000 bo nie wypelnia kubełek
+  /**
+    * Changing fomat of the color from Color class to hex
+    * @param color Color in Color class format
+    * @return Color in hex format
+    */
   private def hexColorToHashFormat(color: Color): String = "#" + color.toString.substring(7, 13)
 
+  /**
+    * Sending flood fill event to the server
+    * @param x x coordinate where the mouse was pressed
+    * @param y y coordinate where the mouse was pressed
+    * @param color color chosen by user
+    */
   private def bucketFill(x: Int, y: Int, color: Color): Unit = {
     val floodFillObj = new JSONObject
     try {

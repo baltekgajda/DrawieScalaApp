@@ -4,6 +4,11 @@ import drawie.Start.startApp
 import scalafx.Includes._
 import scalafx.scene.input.MouseEvent
 
+/**
+  * Controller for the main menu view
+  * Sets handlers for main menu controlls
+  * @param view main menu view to be controlled
+  */
 case class MainMenuController(view: MainMenuView) {
 
   view.newRoomButton.onMouseClicked = (e: MouseEvent) => {

@@ -4,6 +4,11 @@ import drawie.Start.startApp
 import scalafx.Includes._
 import scalafx.scene.input.MouseEvent
 
+/**
+  * Controller of the roomView
+  * Sets handlers from the model to the room view controls
+  * @param view view room to be controlled
+  */
 case class RoomController(view: RoomView) {
   view.mainMenuButton.onMouseClicked = (e: MouseEvent) => {
     val mainMenuView = MainMenuView(800, 600)
