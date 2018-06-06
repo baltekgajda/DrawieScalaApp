@@ -7,17 +7,32 @@ import scalafx.scene.text.Text
 
 /**
   * Main menu view class with main menu
-  * @param sceneWidth width of the scene
+  *
+  * @param sceneWidth  width of the scene
   * @param sceneHeight height of the scene
   */
 case class MainMenuView(sceneWidth: Double, sceneHeight: Double) extends Scene(sceneWidth, sceneHeight) {
 
   import MainMenuView._
 
+  /**
+    * Button for creating the new room
+    */
   val newRoomButton: Button = createButton(344.0, 300.0, 108.0, "New Room")
+
+  /**
+    * Button for joining existing room
+    */
   val joinRoomButton: Button = createButton(344.0, 337.0, 108.0, "Join Room")
+
+  /**
+    * Button for exiting the app
+    */
   val exitButton: Button = createButton(344.0, 410.0, 108.0, "Exit")
 
+  /**
+    * Text field where user should write url to join room
+    */
   private val urlTextField: TextField = new TextField {
     this.layoutX = 216.0
     this.layoutY = 374.0
@@ -27,6 +42,9 @@ case class MainMenuView(sceneWidth: Double, sceneHeight: Double) extends Scene(s
     this.styleClass = List("text-field")
   }
 
+  /**
+    * Title text for "Drawie"
+    */
   private val titleText: Text = new Text {
     this.layoutX = 257.0
     this.layoutY = 250.0
@@ -34,6 +52,9 @@ case class MainMenuView(sceneWidth: Double, sceneHeight: Double) extends Scene(s
     this.styleClass = List("drawie-title")
   }
 
+  /**
+    * Main pane of the scene
+    */
   private val scenePane: Pane = new Pane {
     this.prefHeight = sceneHeight
     this.prefWidth = sceneWidth
@@ -45,7 +66,8 @@ case class MainMenuView(sceneWidth: Double, sceneHeight: Double) extends Scene(s
   content = scenePane
 
   /**
-    * Changing text field promt text to the text
+    * Changing url text field prompt text
+    *
     * @param text text to be displayed
     */
   def changeURLTextFieldPromptText(text: String): Unit = {
@@ -54,7 +76,8 @@ case class MainMenuView(sceneWidth: Double, sceneHeight: Double) extends Scene(s
   }
 
   /**
-    *Getting text from the text field
+    * Getting text from the url text field
+    *
     * @return text on the url field
     */
   def getURLTextFieldText: String = urlTextField.getText
@@ -64,12 +87,14 @@ case class MainMenuView(sceneWidth: Double, sceneHeight: Double) extends Scene(s
   * Companion object for to MainMenu class for implementing static function
   */
 object MainMenuView {
+
   /**
     * Creating button
+    *
     * @param bLayoutX x of the button
     * @param bLayoutY y of the button
-    * @param bWidth width of the button
-    * @param text text on the button
+    * @param bWidth   width of the button
+    * @param text     text on the button
     * @return button created
     */
   def createButton(bLayoutX: Double, bLayoutY: Double, bWidth: Double, text: String): Button = new Button(text) {

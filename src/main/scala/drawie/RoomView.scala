@@ -11,25 +11,46 @@ import scalafx.scene.{AccessibleRole, Scene}
 
 /**
   * View of the room
-  * @param sceneWidth widht of the room window
+  *
+  * @param sceneWidth  widht of the room window
   * @param sceneHeight height of the room window
   */
 case class RoomView(sceneWidth: Double, sceneHeight: Double) extends Scene(sceneWidth, sceneHeight) {
 
+  /**
+    * Button for undo action
+    */
   val undoButton: Button = new Button {
     this.graphic = createImageView(14.0, 14.0, "/images/UndoIcon.png")
     this.styleClass = List("custom-button")
   }
 
+  /**
+    * Button for redo action
+    */
   val redoButton: Button = new Button {
     this.graphic = createImageView(14.0, 14.0, "/images/RedoIcon.png")
     this.styleClass = List("custom-button")
   }
 
+  /**
+    * Button to return to main menu
+    */
   val mainMenuButton: Button = MainMenuView.createButton(715.0, 14.0, 70.0, "Menu")
+
+  /**
+    * Button to copy room url
+    */
   val copyURLButton: Button = MainMenuView.createButton(715.0, 50.0, 70.0, "Copy URL")
+
+  /**
+    * Canvas of the room (only local changes)
+    */
   val roomCanvas: Canvas = new Canvas(500.0, 500.0)
 
+  /**
+    * Loading pane visible only until canvas is full loaded
+    */
   private val loadingStackPane: StackPane = new StackPane {
     this.prefHeight = 500.0
     this.prefWidth = 500.0
@@ -40,11 +61,17 @@ case class RoomView(sceneWidth: Double, sceneHeight: Double) extends Scene(scene
     }
   }
 
+  /**
+    * Toggle button to bucket fill
+    */
   private val bucketFillToggleButton: ToggleButton = new ToggleButton {
     this.graphic = createImageView(14.0, 14.0, "/images/BucketIcon.png")
     this.styleClass = List("toggle-button")
   }
 
+  /**
+    * Slider to change paintbrush width
+    */
   private val paintbrushWidthSlider: Slider = new Slider {
     this.min = 1.0
     this.max = 30.0
@@ -52,6 +79,9 @@ case class RoomView(sceneWidth: Double, sceneHeight: Double) extends Scene(scene
     this.styleClass = List("slider")
   }
 
+  /**
+    * Picker to pick paintbrush color
+    */
   private val colorPicker: ColorPicker = new ColorPicker {
     this.accessibleRole = AccessibleRole.ImageView
     this.value = Color.Black
@@ -60,14 +90,23 @@ case class RoomView(sceneWidth: Double, sceneHeight: Double) extends Scene(scene
     this.styleClass = List("color-picker")
   }
 
+  /**
+    * Server canvas which shows user and online changes
+    */
   private val serverCanvas: Canvas = new Canvas(500.0, 500.0)
 
+  /**
+    * Stack pane for canvases and loading image
+    */
   private val canvasStackPane: StackPane = new StackPane {
     this.prefHeight = 500.0
     this.prefWidth = 500.0
     this.children = List(serverCanvas, roomCanvas, loadingStackPane)
   }
 
+  /**
+    * HBox for tools (redo, undo...)
+    */
   private val toolsHBox: HBox = new HBox {
     this.prefHeight = 44.0
     this.prefWidth = 500.0
@@ -76,6 +115,9 @@ case class RoomView(sceneWidth: Double, sceneHeight: Double) extends Scene(scene
     this.children = List(undoButton, redoButton, bucketFillToggleButton, colorPicker, paintbrushWidthSlider)
   }
 
+  /**
+    * Scene main VBox to position elements
+    */
   private val sceneVBox: VBox = new VBox {
     this.layoutX = 162.0
     this.layoutY = 26.0
@@ -85,6 +127,9 @@ case class RoomView(sceneWidth: Double, sceneHeight: Double) extends Scene(scene
     this.children = List(toolsHBox, canvasStackPane)
   }
 
+  /**
+    * Main pane of the scene
+    */
   private val scenePane: Pane = new Pane {
     this.prefHeight = sceneHeight
     this.prefWidth = sceneWidth
@@ -97,13 +142,15 @@ case class RoomView(sceneWidth: Double, sceneHeight: Double) extends Scene(scene
 
   /**
     * Getting color chosen by user
-    * @return color chosen by user
+    *
+    * @return color
     */
   def getColorFromColorPicker: Color = new Color(colorPicker.getValue)
 
   /**
     * Getting width chosen by user
-    * @return width chosen by user
+    *
+    * @return width
     */
   def getPaintbrushWidth: Double = paintbrushWidthSlider.getValue
 
@@ -120,6 +167,7 @@ case class RoomView(sceneWidth: Double, sceneHeight: Double) extends Scene(scene
 
   /**
     * Drawing dump image on the canvas
+    *
     * @param image image to be drawn
     */
   def drawDump(image: Image): Unit = {
@@ -129,11 +177,12 @@ case class RoomView(sceneWidth: Double, sceneHeight: Double) extends Scene(scene
 
   /**
     * Drawing stroke from serwer on canvas
-    * @param color color of the stroke
-    * @param lineCap lineCap of the stroke
+    *
+    * @param color     color of the stroke
+    * @param lineCap   lineCap of the stroke
     * @param fillStyle fillStyle of the stroke
     * @param lineWidth width of the stroke
-    * @param stroke points of the stroke
+    * @param stroke    points of the stroke
     */
   def drawStrokeOnCanvas(color: String, lineCap: String, fillStyle: String, lineWidth: Int, stroke: List[Int]): Unit = {
     roomCanvas.getGraphicsContext2D.clearRect(0, 0, roomCanvas.getWidth, roomCanvas.getHeight)
@@ -160,6 +209,7 @@ case class RoomView(sceneWidth: Double, sceneHeight: Double) extends Scene(scene
 
   /**
     * Beginning drawing after mouse was pressed on canvas
+    *
     * @param x x coordinate where the event of drawing was executed
     * @param y y coordinate where the event of drawing was executed
     */
@@ -174,6 +224,7 @@ case class RoomView(sceneWidth: Double, sceneHeight: Double) extends Scene(scene
 
   /**
     * Drawing on the canvas stroke made by user
+    *
     * @param x x coordinate where the event of drawing was executed
     * @param y y coordinate where the event of drawing was executed
     */
@@ -185,9 +236,10 @@ case class RoomView(sceneWidth: Double, sceneHeight: Double) extends Scene(scene
 
   /**
     * Creating ImageView
-    * @param iFitWidth width to fit the image
+    *
+    * @param iFitWidth  width to fit the image
     * @param iFitHeight height to fit the image
-    * @param path path of the image
+    * @param path       path of the image
     * @return image to imageView
     */
   private def createImageView(iFitWidth: Double, iFitHeight: Double, path: String): ImageView = new ImageView {

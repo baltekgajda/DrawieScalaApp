@@ -21,14 +21,34 @@ import scala.collection.mutable.ListBuffer
 object Model {
 
   //TODO moze jednak daloby sie cos zrobic z varami? i czy moze private?
+  /**
+    * URL of the created room, generated if new room is created
+    */
   var roomUrl: String = _
+
+  /**
+    * View which is displayed at the moment
+    */
   var roomView: RoomView = _
+
+  /**
+    * Yrl of the "Drawie host
+    */
   private val HOST_URL = "https://drawie.herokuapp.com/"
+
+  /**
+    * Socket connected to the application at the moment
+    */
   private var socket: Socket = _
+
+  /**
+    * List of points that create a stroke
+    */
   private var mStroke: ListBuffer[List[Int]] = ListBuffer() //TODO moze kolekcja co mozna zwiekszac ale val?
 
   /**
     * Creating new room id and joining the room
+    *
     * @return true if joined the room, false otherwise
     */
   def newRoom(): Boolean = {
@@ -37,6 +57,7 @@ object Model {
 
   /**
     * Joining the room with given url
+    *
     * @param url url of the room
     * @return true if joined the room, false otherwise
     */
@@ -72,10 +93,11 @@ object Model {
 
   /**
     * Managing mouse pressed on the canvas
-    * @param x x coordinate where the event of drawing was created
-    * @param y y coordinate where the event of drawing was created
+    *
+    * @param x            x coordinate where the event of drawing was created
+    * @param y            y coordinate where the event of drawing was created
     * @param fillSelected boolean if the fill is selected
-    * @param color color chosen by user
+    * @param color        color chosen by user
     */
   def manageOnMousePressed(x: Int, y: Int, fillSelected: Boolean, color: Color): Unit = {
     if (fillSelected)
@@ -89,8 +111,9 @@ object Model {
 
   /**
     * Managing logic of the mouse dragged on canvas event
-    * @param x x of the event
-    * @param y y of the event
+    *
+    * @param x            x of the event
+    * @param y            y of the event
     * @param fillSelected is the fill button selected
     */
   def manageOnMouseDragged(x: Int, y: Int, fillSelected: Boolean): Unit = {
@@ -102,6 +125,7 @@ object Model {
 
   /**
     * Managing logic of the mouse released on canvas event
+    *
     * @param fillSelected is the fill button selected
     */
   def manageOnMouseReleased(fillSelected: Boolean): Unit = {
@@ -138,6 +162,7 @@ object Model {
 
   /**
     * Managing received dump on socket
+    *
     * @param dump dump received by socket
     */
   private def manageReceivedDumpBC(dump: JSONObject): Unit = try {
@@ -153,6 +178,7 @@ object Model {
 
   /**
     * Managing stroke received by socket
+    *
     * @param stroke stroke received by socket
     */
   private def manageReceivedStrokeBC(stroke: JSONObject): Unit = try {
@@ -174,6 +200,7 @@ object Model {
 
   /**
     * Generating random user id for the new room
+    *
     * @return random user id
     */
   private def generateRandomUUID(): String = {
@@ -181,7 +208,8 @@ object Model {
   }
 
   /**
-    * Sending user's stroke to the serwer
+    * Sending user's stroke to the server
+    *
     * @param mStroke user's stroke points
     */
   private def sendStroke(mStroke: List[List[Int]]): Unit = {
@@ -209,7 +237,8 @@ object Model {
 
   //TODO problemy z #000000 bo nie wypelnia kubełek
   /**
-    * Changing fomat of the color from Color class to hex
+    * Changing format of the color from Color class to hex
+    *
     * @param color Color in Color class format
     * @return Color in hex format
     */
@@ -217,8 +246,9 @@ object Model {
 
   /**
     * Sending flood fill event to the server
-    * @param x x coordinate where the mouse was pressed
-    * @param y y coordinate where the mouse was pressed
+    *
+    * @param x     x coordinate where the mouse was pressed
+    * @param y     y coordinate where the mouse was pressed
     * @param color color chosen by user
     */
   private def bucketFill(x: Int, y: Int, color: Color): Unit = {

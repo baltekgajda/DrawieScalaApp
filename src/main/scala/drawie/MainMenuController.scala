@@ -7,10 +7,14 @@ import scalafx.scene.input.MouseEvent
 /**
   * Controller for the main menu view
   * Sets handlers for main menu controlls
+  *
   * @param view main menu view to be controlled
   */
 case class MainMenuController(view: MainMenuView) {
 
+  /**
+    * Loading new room view and changing controller to RoomController
+    */
   view.newRoomButton.onMouseClicked = (e: MouseEvent) => {
     val roomView = RoomView(800, 600) //TODO dodac te wielkosci gdzies
     val roomController = RoomController(roomView)
@@ -19,6 +23,9 @@ case class MainMenuController(view: MainMenuView) {
     Model.newRoom()
   }
 
+  /**
+    * Loading joined room and changing controller to RoomController
+    */
   view.joinRoomButton.onMouseClicked = (e: MouseEvent) => {
     if (Model.joinRoom(view.getURLTextFieldText)) {
       val roomView = RoomView(800, 600) //TODO dodac te wielkosci gdzies
@@ -31,6 +38,9 @@ case class MainMenuController(view: MainMenuView) {
     }
   }
 
+  /**
+    * Exiting the app
+    */
   view.exitButton.onMouseClicked = (e: MouseEvent) => {
     System.exit(0)
   }

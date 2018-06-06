@@ -10,11 +10,15 @@ import scalafx.scene.image.Image
 object Start extends JFXApp {
 
   /**
-    * starting app
+    * Starting the app
+    *
     * @return application that is started
     */
   def startApp: JFXApp = this
 
+  /**
+    * Main and the only stage of the application
+    */
   stage = new PrimaryStage {
     title = "Drawie"
     icons.add(new Image(getClass.getResourceAsStream("/images/DrawieIcon.bmp")))
