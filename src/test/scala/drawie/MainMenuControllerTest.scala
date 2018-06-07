@@ -1,0 +1,5 @@
+package drawie
+
+class MainMenuControllerTest {
+
+}
