@@ -25,3 +25,6 @@ User interface is intuitive and very simple. Let me walk you through the options
 **5. Brush width** slider - use slider to choose between different brush widths
 
 **6. Copy URL button** - once you click, room URL will be automatically copied to your clipboard
+
+## Documentation
+Full scaladoc documentation is available [here](https://baltekgajda.github.io/DrawieScalaApp/drawie/index.html).
