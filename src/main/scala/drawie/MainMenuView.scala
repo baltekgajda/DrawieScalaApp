@@ -33,7 +33,7 @@ case class MainMenuView(sceneWidth: Double, sceneHeight: Double) extends Scene(s
   /**
     * Text field where user should write url to join room
     */
-  private val urlTextField: TextField = new TextField {
+  val urlTextField: TextField = new TextField {
     this.layoutX = 216.0
     this.layoutY = 374.0
     this.prefHeight = 25.0
@@ -45,7 +45,7 @@ case class MainMenuView(sceneWidth: Double, sceneHeight: Double) extends Scene(s
   /**
     * Title text for "Drawie"
     */
-  private val titleText: Text = new Text {
+  val titleText: Text = new Text {
     this.layoutX = 257.0
     this.layoutY = 250.0
     this.text = "DRAWIE"
@@ -55,7 +55,7 @@ case class MainMenuView(sceneWidth: Double, sceneHeight: Double) extends Scene(s
   /**
     * Main pane of the scene
     */
-  private val scenePane: Pane = new Pane {
+  val scenePane: Pane = new Pane {
     this.prefHeight = sceneHeight
     this.prefWidth = sceneWidth
     this.styleClass = List("menu-background")
