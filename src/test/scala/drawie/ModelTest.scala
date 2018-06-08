@@ -2,5 +2,4 @@ package drawie
 
 class ModelTest {
 
-
 }

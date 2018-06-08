@@ -39,7 +39,7 @@ object Model {
   /**
     * Socket connected to the application at the moment
     */
-  private var socket: Socket = _
+var socket: Socket = _
 
   /**
     * List of points that create a stroke
