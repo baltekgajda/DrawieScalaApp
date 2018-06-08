@@ -51,7 +51,7 @@ case class RoomView(sceneWidth: Double, sceneHeight: Double) extends Scene(scene
   /**
     * Loading pane visible only until canvas is full loaded
     */
-  private val loadingStackPane: StackPane = new StackPane {
+  val loadingStackPane: StackPane = new StackPane {
     this.prefHeight = 500.0
     this.prefWidth = 500.0
     this.styleClass = List("loading-pane")
@@ -64,7 +64,7 @@ case class RoomView(sceneWidth: Double, sceneHeight: Double) extends Scene(scene
   /**
     * Toggle button to bucket fill
     */
-  private val bucketFillToggleButton: ToggleButton = new ToggleButton {
+  val bucketFillToggleButton: ToggleButton = new ToggleButton {
     this.graphic = createImageView(14.0, 14.0, "/images/BucketIcon.png")
     this.styleClass = List("toggle-button")
   }
@@ -72,7 +72,7 @@ case class RoomView(sceneWidth: Double, sceneHeight: Double) extends Scene(scene
   /**
     * Slider to change paintbrush width
     */
-  private val paintbrushWidthSlider: Slider = new Slider {
+  val paintbrushWidthSlider: Slider = new Slider {
     this.min = 1.0
     this.max = 30.0
     this.minHeight = 26.0
@@ -82,7 +82,7 @@ case class RoomView(sceneWidth: Double, sceneHeight: Double) extends Scene(scene
   /**
     * Picker to pick paintbrush color
     */
-  private val colorPicker: ColorPicker = new ColorPicker {
+  val colorPicker: ColorPicker = new ColorPicker {
     this.accessibleRole = AccessibleRole.ImageView
     this.value = Color.Black
     this.prefWidth = 20.0
@@ -93,12 +93,12 @@ case class RoomView(sceneWidth: Double, sceneHeight: Double) extends Scene(scene
   /**
     * Server canvas which shows user and online changes
     */
-  private val serverCanvas: Canvas = new Canvas(500.0, 500.0)
+  val serverCanvas: Canvas = new Canvas(500.0, 500.0)
 
   /**
     * Stack pane for canvases and loading image
     */
-  private val canvasStackPane: StackPane = new StackPane {
+  val canvasStackPane: StackPane = new StackPane {
     this.prefHeight = 500.0
     this.prefWidth = 500.0
     this.children = List(serverCanvas, roomCanvas, loadingStackPane)
@@ -107,7 +107,7 @@ case class RoomView(sceneWidth: Double, sceneHeight: Double) extends Scene(scene
   /**
     * HBox for tools (redo, undo...)
     */
-  private val toolsHBox: HBox = new HBox {
+  val toolsHBox: HBox = new HBox {
     this.prefHeight = 44.0
     this.prefWidth = 500.0
     this.spacing = 15
@@ -118,7 +118,7 @@ case class RoomView(sceneWidth: Double, sceneHeight: Double) extends Scene(scene
   /**
     * Scene main VBox to position elements
     */
-  private val sceneVBox: VBox = new VBox {
+  val sceneVBox: VBox = new VBox {
     this.layoutX = 162.0
     this.layoutY = 26.0
     this.prefHeight = 548.8
@@ -130,7 +130,7 @@ case class RoomView(sceneWidth: Double, sceneHeight: Double) extends Scene(scene
   /**
     * Main pane of the scene
     */
-  private val scenePane: Pane = new Pane {
+  val scenePane: Pane = new Pane {
     this.prefHeight = sceneHeight
     this.prefWidth = sceneWidth
     this.styleClass = List("menu-background")
