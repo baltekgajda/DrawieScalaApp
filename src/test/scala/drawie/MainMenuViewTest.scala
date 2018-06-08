@@ -4,7 +4,7 @@ import javafx.collections.FXCollections
 import javafx.embed.swing.JFXPanel
 import org.scalatest.{BeforeAndAfter, FlatSpec}
 
-class MainMenuViewTest extends  FlatSpec with BeforeAndAfter{
+class MainMenuViewTest extends  FlatSpec {
 
     val jfxPanel = new JFXPanel
     val mainMenuView = MainMenuView(200,200)
