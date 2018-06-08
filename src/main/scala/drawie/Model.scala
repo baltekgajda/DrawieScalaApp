@@ -20,7 +20,7 @@ import scala.collection.mutable.ListBuffer
   */
 object Model {
 
-  //TODO moze jednak daloby sie cos zrobic z varami? i czy moze private?
+
   /**
     * URL of the created room, generated if new room is created
     */
@@ -44,7 +44,7 @@ var socket: Socket = _
   /**
     * List of points that create a stroke
     */
-  private var mStroke: ListBuffer[List[Int]] = ListBuffer() //TODO moze kolekcja co mozna zwiekszac ale val?
+  private var mStroke: ListBuffer[List[Int]] = ListBuffer()
 
   /**
     * Creating new room id and joining the room
@@ -166,13 +166,13 @@ var socket: Socket = _
     * @param dump dump received by socket
     */
   private def manageReceivedDumpBC(dump: JSONObject): Unit = try {
-    val imgInB64 = dump.getString("snapshot").split(",") //todo CZY TO ponizej jest tez scaolowe?
+    val imgInB64 = dump.getString("snapshot").split(",")
     val inputStream = new ByteArrayInputStream(new BASE64Decoder().decodeBuffer(imgInB64(imgInB64.length - 1)))
     roomView.drawDump(new Image(inputStream))
     roomView.endLoading()
-  } catch { // TODO co z tym? cos trzeba dodac czy nie more specific cases first ! bo printfy to tak średnio chyba
+  } catch {
     case ioe: IOException => ioe.printStackTrace()
-    case e: Exception => e.printStackTrace() //TODO nie wystarczy jeden do obsluzenia tego
+    case e: Exception => e.printStackTrace()
     //plus czy musimy w ogole to tryowac?
   }
 
@@ -235,14 +235,17 @@ var socket: Socket = _
     socket.emit("stroke", strokeObj)
   }
 
-  //TODO problemy z #000000 bo nie wypelnia kubełek
   /**
     * Changing format of the color from Color class to hex
     *
     * @param color Color in Color class format
     * @return Color in hex format
     */
-  private def hexColorToHashFormat(color: Color): String = "#" + color.toString.substring(7, 13)
+  private def hexColorToHashFormat(color: Color): String = {
+    val colorToReturn = "#" + color.toString.substring(7, 13)
+    if (colorToReturn == "#000000") "#050505"
+    else colorToReturn
+  }
 
   /**
     * Sending flood fill event to the server
