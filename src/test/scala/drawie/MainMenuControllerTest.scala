@@ -1,11 +1,9 @@
 package drawie
 
 import javafx.embed.swing.JFXPanel
-import org.scalamock.scalatest.MockFactory
 import org.scalatest.FlatSpec
-import org.scalatest.easymock.EasyMockSugar.MockObjects
 
-class MainMenuControllerTest extends FlatSpec with MockFactory{
+class MainMenuControllerTest extends FlatSpec {
 
   val jfxPanel = new JFXPanel
   val mainMenuView = MainMenuView(200,200)
