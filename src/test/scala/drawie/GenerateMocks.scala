@@ -1,5 +1,0 @@
-package drawie
-
-class GenerateMocks {
-
-}

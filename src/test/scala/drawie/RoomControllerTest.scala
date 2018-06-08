@@ -1,7 +1,6 @@
 package drawie
 
 import javafx.embed.swing.JFXPanel
-import org.scalamock.scalatest.MockFactory
 import org.scalatest.FlatSpec
 
 class RoomControllerTest extends FlatSpec {
